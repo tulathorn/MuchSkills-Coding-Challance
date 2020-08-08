@@ -1,35 +1,35 @@
 version: '3.3'
 services:
-  frontend:
-    container_name: frontend
-    ports:
-      - '3000:3000'
-    build:
-      context: frontend
-      dockerfile: Dockerfile
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
-      - /app/.next
+  # frontend:
+  #   container_name: frontend
+  #   ports:
+  #     - '3000:3000'
+  #   build:
+  #     context: frontend
+  #     dockerfile: Dockerfile
+  #   volumes:
+  #     - ./frontend:/app
+  #     - /app/node_modules
+  #     - /app/.next
   mongodb:
     image: mongo:4
     container_name: database-mongo
     ports:
       - 27017:27017
-  backend:
-    container_name: backend
-    image: node:12.18-alpine3.12
-    command: npm run dev:watch
-    ports:
-      - 4000:4000
-    environment:
-      MONGO_URL: mongodb
-      PORT: 4000
-    volumes:
-      - ./backend:/src
-      - /src/node_modules
-      - /src/package.json
-    links:
-      - mongodb
-    depends_on:
-      - mongodb
+  # backend:
+  #   container_name: backend
+  #   image: node:12.18-alpine3.12
+  #   command: npm run dev:watch
+  #   ports:
+  #     - 4000:4000
+  #   environment:
+  #     MONGO_URL: mongodb
+  #     PORT: 4000
+  #   volumes:
+  #     - ./backend:/src
+  #     - /src/node_modules
+  #     - /src/package.json
+  #   links:
+  #     - mongodb
+  #   depends_on:
+  #     - mongodb
