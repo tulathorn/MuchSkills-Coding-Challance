@@ -18,21 +18,6 @@ db.once('open', function () {
 
 const ToolsModel = require('./model/tools')
 
-// const mongoconnection = MongoClient.connect('mongodb://localhost', function (err, client) {
-//   if (err) throw err
-
-//   const db = client.db('Muchskills')
-
-//   let temp = db.collection('Tools').find({}, function (findErr, result) {
-//     if (findErr) throw findErr
-//     console.log(result)
-//   })
-
-//   console.log('temp', temp)
-
-//   return db
-// })
-
 let mockdata = [
   {
     name: 'Harry Potter and the Chamber of Secrets',
@@ -76,6 +61,7 @@ const typeDefs = gql`
   }
   type Mutation {
     createNewTools(input: addTool): [tool]
+    updateTools(_id: ID, input: addTool): [tool]
   }
 `
 
@@ -96,6 +82,16 @@ const resolvers = {
       console.log(JSON.parse(temp), mockdata)
       mockdata = { ...mockdata, temp2 }
       return [result]
+    },
+    updateTools: async (id, data) => {
+      console.log('id', data._id)
+      console.log('data', data.input)
+      temp2 = JSON.parse(JSON.stringify(data.input))
+      const result = await ToolsModel.findOneAndUpdate({ _id: data._id }, { ...temp2 }).then(
+        (data) => data
+      )
+      console.log('result', result)
+      console.log(temp2)
     },
   },
 }
