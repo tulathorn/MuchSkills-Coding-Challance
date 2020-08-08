@@ -88,13 +88,14 @@ const resolvers = {
     },
   },
   Mutation: {
-    createNewTools: (_, data) => {
+    createNewTools: async (_, data) => {
       data = data.input
       temp = JSON.stringify(data)
       temp2 = JSON.parse(temp)
+      const result = await ToolsModel.create(temp2).then((data) => data)
       console.log(JSON.parse(temp), mockdata)
       mockdata = { ...mockdata, temp2 }
-      return [data]
+      return [result]
     },
   },
 }
