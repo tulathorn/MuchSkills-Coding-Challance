@@ -7,7 +7,7 @@ const { ApolloServer, gql } = require('apollo-server-express')
 const mongoose = require('mongoose')
 
 mongoose.Promise = global.Promise
-mongoose.connect('mongodb://localhost/test', { useNewUrlParser: true })
+mongoose.connect('mongodb://localhost/test', { useNewUrlParser: true, useFindAndModify: false })
 
 const db = mongoose.connection
 db.on('error', console.error.bind(console, 'connection error:'))
@@ -61,7 +61,8 @@ const typeDefs = gql`
   }
   type Mutation {
     createNewTools(input: addTool): [tool]
-    updateTools(_id: ID, input: addTool): [tool]
+    updateTools(_id: ID, input: addTool): tool
+    deleteTools(_id: ID): [tool]
   }
 `
 
@@ -79,19 +80,24 @@ const resolvers = {
       temp = JSON.stringify(data)
       temp2 = JSON.parse(temp)
       const result = await ToolsModel.create(temp2).then((data) => data)
-      console.log(JSON.parse(temp), mockdata)
       mockdata = { ...mockdata, temp2 }
       return [result]
     },
-    updateTools: async (id, data) => {
-      console.log('id', data._id)
-      console.log('data', data.input)
+    updateTools: async (_, data) => {
+      const id = data._id
       temp2 = JSON.parse(JSON.stringify(data.input))
-      const result = await ToolsModel.findOneAndUpdate({ _id: data._id }, { ...temp2 }).then(
+      const result = await ToolsModel.findOneAndUpdate({ _id: id }, { ...temp2 }).then(
         (data) => data
       )
-      console.log('result', result)
-      console.log(temp2)
+      return {
+        _id: id,
+        ...temp2,
+      }
+    },
+    deleteTools: async (_, data) => {
+      const id = data._id
+      const result = await ToolsModel.deleteOne({ _id: id }).then((data) => data)
+      return await ToolsModel.find().then((data) => data)
     },
   },
 }
