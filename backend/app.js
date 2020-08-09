@@ -39,6 +39,14 @@ const typeDefs = gql`
     departments: [addSection]
   }
 
+  input addNewTool {
+    name: String
+    isDev: Boolean
+    isDesign: Boolean
+    isBusiness: Boolean
+    isOperation: Boolean
+  }
+
   input addSection {
     name: String
   }
@@ -53,14 +61,31 @@ const typeDefs = gql`
     departments: [section]
   }
 
+  type newTool {
+    _id: ID
+    name: String
+    isDev: Boolean
+    isDesign: Boolean
+    isBusiness: Boolean
+    isOperation: Boolean
+  }
+
   # The "Query" type is special: it lists all of the available queries that
   # clients can execute, along with the return type for each. In this
   # case, the "books" query returns an array of zero or more Books (defined above).
   type Query {
     tools: [tool]
+    newTools: [newTool]
   }
   type Mutation {
     createNewTools(input: addTool): [tool]
+    addNewTool(
+      name: String
+      isDev: Boolean
+      isDesign: Boolean
+      isBusiness: Boolean
+      isOperation: Boolean
+    ): [tool]
     updateTools(_id: ID, input: addTool): tool
     deleteTools(_id: ID): [tool]
   }
@@ -73,6 +98,10 @@ const resolvers = {
       console.log(data)
       return data
     },
+    newTools: async () => {
+      const data = await ToolsModel.find().then((data) => data)
+      return data
+    },
   },
   Mutation: {
     createNewTools: async (_, data) => {
@@ -81,6 +110,12 @@ const resolvers = {
       temp2 = JSON.parse(temp)
       const result = await ToolsModel.create(temp2).then((data) => data)
       mockdata = { ...mockdata, temp2 }
+      return [result]
+    },
+    addNewTool: async (parent, args) => {
+      console.log('root', parent)
+      console.log('data', args)
+      const result = await ToolsModel.create(args).then((data) => data)
       return [result]
     },
     updateTools: async (_, data) => {

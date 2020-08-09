@@ -19,23 +19,7 @@ const Home = () => {
 
       <main className={styles.main}>
         <h1 className={styles.title}>MuchSkill Tools management</h1>
-
         <p className={styles.description}>Finding your tools that you need here</p>
-
-        {/* <div className={styles.gridFluid}>
-          <div className={styles.box}>
-            <h3>Filter</h3>
-            <p>Select option that you to see</p>
-            <form action="/action_page.php" method="get">
-              <input type="checkbox" name="vehicle1" value="Bike" />
-              <label for="vehicle1"> I have a bike</label>
-              <input type="checkbox" name="vehicle2" value="Car" />
-              <label for="vehicle2"> I have a car</label>
-              <input type="checkbox" name="vehicle3" value="Boat" />
-              <label for="vehicle3"> I have a boat</label>
-            </form>
-          </div>
-        </div> */}
 
         <div className={styles.grid}>
           <button onClick={(e) => console.log(e)}>Add new toools</button>
