@@ -30,37 +30,9 @@ let mockdata = [
 ]
 
 const cors = require('cors')
-const Tools = require('./model/tools')
 const app = express()
 
 const typeDefs = gql`
-  input addTool {
-    name: String
-    departments: [addSection]
-  }
-
-  input addNewTool {
-    name: String
-    isDev: Boolean
-    isDesign: Boolean
-    isBusiness: Boolean
-    isOperation: Boolean
-  }
-
-  input addSection {
-    name: String
-  }
-
-  type section {
-    name: String
-  }
-
-  type tool {
-    _id: ID
-    name: String
-    departments: [section]
-  }
-
   type newTool {
     _id: ID
     name: String
@@ -74,63 +46,53 @@ const typeDefs = gql`
   # clients can execute, along with the return type for each. In this
   # case, the "books" query returns an array of zero or more Books (defined above).
   type Query {
-    tools: [tool]
     newTools: [newTool]
   }
   type Mutation {
-    createNewTools(input: addTool): [tool]
     addNewTool(
       name: String
       isDev: Boolean
       isDesign: Boolean
       isBusiness: Boolean
       isOperation: Boolean
-    ): [tool]
-    updateTools(_id: ID, input: addTool): tool
-    deleteTools(_id: ID): [tool]
+    ): [newTool]
+    updateNewTool(
+      _id: String
+      name: String
+      isDev: Boolean
+      isDesign: Boolean
+      isBusiness: Boolean
+      isOperation: Boolean
+    ): newTool
+    deleteNewTool(_id: String): [newTool]
   }
 `
 
 const resolvers = {
   Query: {
-    tools: async () => {
-      const data = await ToolsModel.find().then((data) => data)
-      console.log(data)
-      return data
-    },
     newTools: async () => {
       const data = await ToolsModel.find().then((data) => data)
       return data
     },
   },
   Mutation: {
-    createNewTools: async (_, data) => {
-      data = data.input
-      temp = JSON.stringify(data)
-      temp2 = JSON.parse(temp)
-      const result = await ToolsModel.create(temp2).then((data) => data)
-      mockdata = { ...mockdata, temp2 }
-      return [result]
-    },
     addNewTool: async (parent, args) => {
       console.log('root', parent)
       console.log('data', args)
       const result = await ToolsModel.create(args).then((data) => data)
       return [result]
     },
-    updateTools: async (_, data) => {
-      const id = data._id
-      temp2 = JSON.parse(JSON.stringify(data.input))
-      const result = await ToolsModel.findOneAndUpdate({ _id: id }, { ...temp2 }).then(
+    updateNewTool: async (parent, args) => {
+      console.log('root', parent)
+      console.log('data', args)
+      const result = await ToolsModel.findOneAndUpdate({ _id: args._id }, { ...args }).then(
         (data) => data
       )
-      return {
-        _id: id,
-        ...temp2,
-      }
+      console.log('result', result)
+      return result
     },
-    deleteTools: async (_, data) => {
-      const id = data._id
+    deleteNewTool: async (parent, args) => {
+      const id = args._id
       const result = await ToolsModel.deleteOne({ _id: id }).then((data) => data)
       return await ToolsModel.find().then((data) => data)
     },
