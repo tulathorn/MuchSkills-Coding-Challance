@@ -4,8 +4,11 @@ import { useMutation } from '@apollo/client'
 import { ADD_TOOL } from '../graphql/tools'
 import { withApollo } from '../libs/apollo'
 import styles from '../styles/Home.module.css'
+import { route } from 'next/dist/next-server/server/router'
 
 const AddTools = () => {
+  const router = useRouter()
+
   const [toolName, setToolName] = useState('')
   const [checkDev, setcheckDev] = useState(false)
   const [checkDesign, setcheckDesign] = useState(false)
@@ -16,15 +19,16 @@ const AddTools = () => {
 
   const submitForm = (e) => {
     e.preventDefault()
-    let submitData = {
-      name: toolName,
-      departments: [{}],
-    }
-    if (checkDev) submitData.departments.push({ name: 'dev' })
-    if (chechDesign) submitData.departments.push({ name: 'design' })
-    if (checkBusiness) submitData.departments.push({ name: 'business' })
-    if (checkOperation) submitData.departments.push({ name: 'operation' })
-    console.log(submitData)
+    addTool({
+      variables: {
+        name: toolName,
+        isDev: checkDev,
+        isDesign: checkDesign,
+        isBusiness: checkBusiness,
+        isOperation: checkOperation,
+      },
+    })
+    router.push('/')
   }
   return (
     <div className={styles.container}>

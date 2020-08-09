@@ -2,25 +2,39 @@ import { gql } from '@apollo/client'
 
 const TOOLS = gql`
   query {
-    tools {
+    newTools {
       _id
       name
-      departments {
-        name
-      }
+      isDev
+      isDesign
+      isBusiness
+      isOperation
     }
   }
 `
 
 const ADD_TOOL = gql`
-mutation
-  createNewTools($input: addTool){
-    name: String
-    departments($input: addSection): [
-      {
-        name: String
-      }
-    ]
+  mutation AddNewTool(
+    $name: String
+    $isDev: Boolean
+    $isDesign: Boolean
+    $isBusiness: Boolean
+    $isOperation: Boolean
+  ) {
+    addNewTool(
+      name: $name
+      isDev: $isDev
+      isDesign: $isDesign
+      isBusiness: $isBusiness
+      isOperation: $isOperation
+    ) {
+      _id
+      name
+      isDev
+      isDesign
+      isBusiness
+      isOperation
+    }
   }
 `
 

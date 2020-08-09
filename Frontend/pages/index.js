@@ -1,14 +1,16 @@
 import Head from 'next/head'
+import { useRouter } from 'next/router'
 import { withApollo } from '../libs/apollo'
 import { useQuery } from '@apollo/client'
 import { TOOLS } from '../graphql/tools'
 import styles from '../styles/Home.module.css'
 
 const Home = () => {
+  const router = useRouter()
   const { loading, error, data } = useQuery(TOOLS)
   if (error) return <h1>Error</h1>
   if (loading) return <h1>Loading...</h1>
-  if (data) console.log('data', data.tools)
+  if (data) console.log('data', data)
 
   return (
     <div className={styles.container}>
@@ -22,7 +24,13 @@ const Home = () => {
         <p className={styles.description}>Finding your tools that you need here</p>
 
         <div className={styles.grid}>
-          <button onClick={(e) => console.log(e)}>Add new toools</button>
+          <button
+            onClick={() => {
+              router.push('/add')
+            }}
+          >
+            Add new toools
+          </button>
         </div>
 
         <div className={styles.grid}>
@@ -40,14 +48,15 @@ const Home = () => {
             <h3>Examples &rarr;</h3>
             <p>Discover and deploy boilerplate example Next.js projects.</p>
           </a> */}
-          {data.tools.map((data) => {
+          {data.newTools.map((data) => {
             return (
               <div className={styles.card}>
                 <h3>{data.name}</h3>
                 <p>Associated with:</p>
-                {data.departments.map((element) => (
-                  <p>{element.name}</p>
-                ))}
+                {data.isDev && <p>Development</p>}
+                {data.isDesign && <p>Design</p>}
+                {data.isBusiness && <p>Business</p>}
+                {data.isOperation && <p>Operation</p>}
               </div>
             )
           })}
