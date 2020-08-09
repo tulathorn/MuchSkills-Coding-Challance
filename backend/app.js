@@ -18,17 +18,6 @@ db.once('open', function () {
 
 const ToolsModel = require('./model/tools')
 
-let mockdata = [
-  {
-    name: 'Harry Potter and the Chamber of Secrets',
-    departments: [{ name: 'dev' }, { name: 'design' }],
-  },
-  {
-    name: 'test',
-    departments: [{ name: 'business' }, { name: 'design' }],
-  },
-]
-
 const cors = require('cors')
 const app = express()
 
@@ -47,6 +36,7 @@ const typeDefs = gql`
   # case, the "books" query returns an array of zero or more Books (defined above).
   type Query {
     newTools: [newTool]
+    tool(_id: String): newTool
   }
   type Mutation {
     addNewTool(
@@ -72,6 +62,11 @@ const resolvers = {
   Query: {
     newTools: async () => {
       const data = await ToolsModel.find().then((data) => data)
+      return data
+    },
+    tool: async (parent, args) => {
+      console.log(args)
+      const data = await ToolsModel.findOne({ _id: args._id }).then((data) => data)
       return data
     },
   },

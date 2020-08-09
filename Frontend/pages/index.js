@@ -50,7 +50,10 @@ const Home = () => {
           </a> */}
           {data.newTools.map((data) => {
             return (
-              <div className={styles.card}>
+              <div
+                className={styles.card}
+                onClick={() => router.push('/edit/[id]', `/edit/${data._id}`)}
+              >
                 <h3>{data.name}</h3>
                 <p>Associated with:</p>
                 {data.isDev && <p>Development</p>}

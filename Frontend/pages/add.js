@@ -4,7 +4,6 @@ import { useMutation } from '@apollo/client'
 import { ADD_TOOL } from '../graphql/tools'
 import { withApollo } from '../libs/apollo'
 import styles from '../styles/Home.module.css'
-import { route } from 'next/dist/next-server/server/router'
 
 const AddTools = () => {
   const router = useRouter()

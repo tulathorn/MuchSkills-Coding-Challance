@@ -13,6 +13,19 @@ const TOOLS = gql`
   }
 `
 
+const TOOL = gql`
+  query Tool($id: String) {
+    tool(_id: $id) {
+      _id
+      name
+      isDev
+      isDesign
+      isBusiness
+      isOperation
+    }
+  }
+`
+
 const ADD_TOOL = gql`
   mutation AddNewTool(
     $name: String
@@ -38,4 +51,4 @@ const ADD_TOOL = gql`
   }
 `
 
-export { TOOLS, ADD_TOOL }
+export { TOOLS, TOOL, ADD_TOOL }
