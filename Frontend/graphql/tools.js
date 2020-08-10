@@ -51,4 +51,31 @@ const ADD_TOOL = gql`
   }
 `
 
-export { TOOLS, TOOL, ADD_TOOL }
+const EDIT_TOOL = gql`
+  mutation UpdateTool(
+    $id: String
+    $name: String
+    $isDev: Boolean
+    $isDesign: Boolean
+    $isBusiness: Boolean
+    $isOperation: Boolean
+  ) {
+    updateNewTool(
+      _id: $id
+      name: $name
+      isDev: $isDev
+      isDesign: $isDesign
+      isBusiness: $isBusiness
+      isOperation: $isOperation
+    ) {
+      _id
+      name
+      isDev
+      isDesign
+      isBusiness
+      isOperation
+    }
+  }
+`
+
+export { TOOLS, TOOL, ADD_TOOL, EDIT_TOOL }

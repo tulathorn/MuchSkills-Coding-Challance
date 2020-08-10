@@ -78,7 +78,8 @@ const resolvers = {
       return [result]
     },
     updateNewTool: async (parent, args) => {
-      console.log('root', parent)
+      console.log('update call')
+      console.log('parent', parent)
       console.log('data', args)
       const result = await ToolsModel.findOneAndUpdate({ _id: args._id }, { ...args }).then(
         (data) => data
