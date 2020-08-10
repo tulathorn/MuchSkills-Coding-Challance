@@ -78,4 +78,17 @@ const EDIT_TOOL = gql`
   }
 `
 
-export { TOOLS, TOOL, ADD_TOOL, EDIT_TOOL }
+const DELETE_TOOL = gql`
+  mutation DeleteTool($id: String) {
+    deleteNewTool(_id: $id) {
+      _id
+      name
+      isDev
+      isDesign
+      isBusiness
+      isOperation
+    }
+  }
+`
+
+export { TOOLS, TOOL, ADD_TOOL, EDIT_TOOL, DELETE_TOOL }

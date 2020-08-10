@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { withApollo } from '../../libs/apollo'
 import { useRouter } from 'next/router'
 import { useQuery, useMutation } from '@apollo/client'
-import { TOOL, EDIT_TOOL } from '../../graphql/tools'
+import { TOOL, EDIT_TOOL, DELETE_TOOL } from '../../graphql/tools'
 import styles from '../../styles/Home.module.css'
 
 const EditTool = (props) => {
@@ -10,7 +10,8 @@ const EditTool = (props) => {
   const { id } = router.query
 
   const [editTool, { data2 }] = useMutation(EDIT_TOOL)
-  // const [_id, setId] = useState(undefined)
+  const [deleteTool, { deleteData }] = useMutation(DELETE_TOOL)
+
   const [toolName, setToolName] = useState(undefined)
   const [checkDev, setcheckDev] = useState(undefined)
   const [checkDesign, setcheckDesign] = useState(undefined)
@@ -49,8 +50,10 @@ const EditTool = (props) => {
     router.push('/')
   }
 
-  const handleChangeDev = (state) => {
-    setcheckDev(!state)
+  const handleDelete = (e) => {
+    e.preventDefault()
+    deleteTool({ variables: { id } })
+    router.push('/')
   }
 
   return (
@@ -111,6 +114,7 @@ const EditTool = (props) => {
               </button>
             </form>
           </div>
+          <button onClick={(e) => handleDelete(e)}>Delete this record</button>
         </div>
       </main>
     </div>
